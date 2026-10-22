@@ -1,0 +1,15 @@
+services:
+  drive-autosleep:
+    image: alpine:3.20
+    container_name: drive-autosleep
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DRIVES: "sda sdb"
+      IDLE_MINUTES: "10"
+      CHECK_INTERVAL: "60"
+    volumes:
+      - /sys:/sys
+      - /dev:/dev
+      - /DATA/autosleep_both_drives.sh:/autosleep.sh:ro
+    command: sh -c "apk add --no-cache smartmontools hdparm && sh /autosleep.sh"
